@@ -7,8 +7,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A simple word guessing game where the player attempts to guess a word from a specified category.
- * The game provides an option for an admin to view the selected word during gameplay.
+ * A simple word guessing game where the player attempts to guess a word from a
+ * specified category.
+ * The game provides an option for an admin to view the selected word during
+ * gameplay.
  *
  * @author Zander Coffman and Jacob Pape
  * @version 1.0
@@ -20,10 +22,11 @@ public class Game {
   public static ArrayList<Character> listOfChars = new ArrayList<Character>();
 
   // Set admin mode to false by default
-  public static boolean adminMode = false;
+  public static boolean adminMode = true;
 
   /**
-   * The main method that initializes the game, reads categories and words from a file,
+   * The main method that initializes the game, reads categories and words from a
+   * file,
    * and starts the main game loop.
    *
    * @param args The command-line arguments (not used in this program)
@@ -83,20 +86,15 @@ public class Game {
         System.out.println(printoutUnderlinedCharacters());
         System.out.println("You have " + amountOfTurns + " guess(es) to solve the puzzle.\nGuess a letter:");
 
-        String characterGuessed = "";
-        while (characterGuessed.length() != 1) {
-          characterGuessed = input.next();
-        }
+        String characterGuessed = input.next().toLowerCase(); // Convert input to lowercase
 
-        char guessedChar = returnChar(characterGuessed);
-
-        // Check if the guessed character is not in the word
-        if (!returnInCharacterList(guessedChar, '~')) {
+        // Check if the guessed character is in the word
+        if (word.toLowerCase().contains(characterGuessed)) {
+          addCharToArrayList(characterGuessed.charAt(0)); // Add the guessed character to the list
+          System.out.println(catchGuess(characterGuessed));
+        } else {
           amountOfTurns--;
           System.out.println("Incorrect guess. You have " + amountOfTurns + " turn(s) remaining.");
-        } else {
-          addCharToArrayList(guessedChar);
-          System.out.println(catchGuess(characterGuessed));
         }
 
         // Check if the word has been guessed
@@ -111,7 +109,7 @@ public class Game {
       wantsToPlay = playAgain.equalsIgnoreCase("yes");
     }
 
-    //closes bc we dont like memory leaks
+    // closes bc we dont like memory leaks
     input.close();
   }
 
@@ -157,13 +155,14 @@ public class Game {
   /**
    * Checks if a character is in the list of guessed characters.
    *
-   * @param test The character to be checked.
-   * @param special The special character representing a non-existent character (e.g., '~').
+   * @param test    The character to be checked.
+   * @param special The special character representing a non-existent character
+   *                (e.g., '~').
    * @return True if the character is in the list; false otherwise.
    */
   public static boolean returnInCharacterList(char test, char special) {
     for (char e : listOfChars) {
-      if (e == test) {
+      if (Character.toLowerCase(e) == Character.toLowerCase(test)) {
         return true;
       }
     }
@@ -178,7 +177,8 @@ public class Game {
   /**
    * Creates a string with underlined characters for the word.
    *
-   * @return A string with guessed characters and underscores for unknown characters.
+   * @return A string with guessed characters and underscores for unknown
+   *         characters.
    */
   public static String printoutUnderlinedCharacters() {
     StringBuilder output = new StringBuilder();
